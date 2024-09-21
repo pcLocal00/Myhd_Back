@@ -32,8 +32,12 @@ Route::middleware(['cors'])->group(function () {
     Route::get('/job/historique/{id}',[JobController::class,'historiqueCommande']);
 
     Route::get('/catalogue',[CatalogueController::class,'getCatalogue']);
+
     Route::get('/famille',[CatalogueController::class,'getFamille']);
     Route::get('/famille/hierarchy/{id}',[ProductController::class,'showProductForm']);
+
+    Route::get('/hdcodetg',[ProductController::class,'getHdCodeTg']);
+
 
     Route::get('/product/realise',[ProductController::class,'getProductRealisaPrint']);
     Route::get('/product/myhd',[ProductController::class,'getProductMyhd']);

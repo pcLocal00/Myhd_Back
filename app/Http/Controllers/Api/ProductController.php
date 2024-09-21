@@ -7,9 +7,12 @@ use App\Http\Resources\ProductMyHdResource;
 use App\Http\Resources\ProductOneMyHdResource;
 use App\Http\Resources\ProductPaPResource;
 use App\Models\HdCatalogue;
+use App\Models\HdCodeTg;
+use App\Models\HdTechnicalGroups;
 use App\Models\Product;
 use App\Models\RfqProduct;
 use App\Services\CatalogueTools;
+use Illuminate\Support\Facades\Request;
 
 class ProductController extends Controller
 {
@@ -145,7 +148,7 @@ class ProductController extends Controller
         return response()->json(['data' => $tabjson]);
     }
 
-    public function sdtConfiguredPapersElement( $idProduct)
+    public function sdtConfiguredPapersElement($idProduct)
     {
 
         $catalogueTools = new CatalogueTools();
@@ -180,6 +183,23 @@ class ProductController extends Controller
         return response()->json(['data' => $data]);
     }
 
+    public function addTechnicalGroups(Request $request){
+        $data = $request->all();
+        HdTechnicalGroups::create([$data]);
+    }
+
+public function getHdCodeTg() {
+    $hdcodetg = HdCodeTg::get();
+
+    $data = $hdcodetg->map(function($item) {
+        return [
+            'name' => $item->label,
+            'code' => $item->code
+        ];
+    });
+
+    return response()->json(['data' => $data]);
+}
 
 }
 
