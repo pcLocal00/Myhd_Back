@@ -12,7 +12,8 @@ use App\Models\HdTechnicalGroups;
 use App\Models\Product;
 use App\Models\RfqProduct;
 use App\Services\CatalogueTools;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -183,23 +184,44 @@ class ProductController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function addTechnicalGroups(Request $request){
-        $data = $request->all();
-        HdTechnicalGroups::create([$data]);
+    public function addTechnicalGroups(Request $request)
+    {
+        Log::info($request->all());
+        $validatedData = $request->validate([
+            'TG_CODE' => 'required|string|max:255',
+            'TG_CODE_RAPID' => 'nullable|string|max:255',
+            'TG_VALUE' => 'required|string|max:255',
+            'TG_TYPE_GROUP' => 'required|string|max:255',
+            'TG_REQUIREDTXTFIELD' => 'string',
+            'TG_LABELTXTFIELD' => 'nullable|string|max:255',
+        ]);
+
+        // Map the request data to the model attributes
+        $data = [
+            'code' => $validatedData['TG_CODE'],
+            'codeValeur' => $validatedData['TG_CODE_RAPID'],
+            'valeur' => $validatedData['TG_VALUE'],
+            'typeGroup'=> $validatedData['TG_TYPE_GROUP'],
+            'requireTxtField' => $validatedData['TG_REQUIREDTXTFIELD'] ? 1 : 0,
+            'labelTxtField' => $validatedData['TG_LABELTXTFIELD'],
+        ];
+
+        HdTechnicalGroups::create($data);
     }
 
-public function getHdCodeTg() {
-    $hdcodetg = HdCodeTg::get();
+    public function getHdCodeTg() {
 
-    $data = $hdcodetg->map(function($item) {
-        return [
-            'name' => $item->label,
-            'code' => $item->code
-        ];
-    });
+        $hdcodetg = HdCodeTg::get();
 
-    return response()->json(['data' => $data]);
-}
+        $data = $hdcodetg->map(function($item) {
+            return [
+                'name' => $item->label,
+                'code' => $item->code
+            ];
+        });
+
+        return response()->json(['data' => $data]);
+    }
 
 }
 

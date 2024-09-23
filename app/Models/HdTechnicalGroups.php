@@ -9,7 +9,7 @@ class HdTechnicalGroups extends Model
 {
     use HasFactory;
     protected $table = 'hd_technical_groups';
-
+    public $timestamps = false; 
     protected $fillable = [
         'id',
         'code',
@@ -17,7 +17,7 @@ class HdTechnicalGroups extends Model
         'valeur',
         'typeGroup',
         'requireTxtField',
-        'labelTxtFiel',
+        'labelTxtField',
     ];
     public function lineTg()
     {

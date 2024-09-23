@@ -37,6 +37,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('/famille/hierarchy/{id}',[ProductController::class,'showProductForm']);
 
     Route::get('/hdcodetg',[ProductController::class,'getHdCodeTg']);
+    Route::post('/addtg',[ProductController::class,'addTechnicalGroups']);
 
 
     Route::get('/product/realise',[ProductController::class,'getProductRealisaPrint']);
