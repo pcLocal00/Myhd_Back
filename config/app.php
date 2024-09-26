@@ -16,6 +16,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'cors_allowed_origin' => env('CORS_ALLOWED_ORIGIN', '*'),
 
     /*
     |--------------------------------------------------------------------------

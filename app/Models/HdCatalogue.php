@@ -11,6 +11,8 @@ class HdCatalogue extends Model
     use HasFactory;
 
     protected $table = 'hd_catalogue';
+    
+    public $timestamps = false;
 
     protected $fillable = [
         'id',
@@ -27,32 +29,35 @@ class HdCatalogue extends Model
         'typeShow',
         'idParent',
     ];
-    // Recursive function to get the hierarchical structure
+
     public function getHierarchy($parentId = null)
     {
-        // Fetch all records with the given parentId
         $nodes = HdCatalogue::where('idParent', $parentId)->get();
 
         $result = [];
 
         foreach ($nodes as $node) {
-            $children = $this->getHierarchy($node->id); // Recursive call for children
+            $children = $this->getHierarchy($node->id);
 
             $result[] = [
                 'id' => $node->id,
                 'name' => $node->name,
-                'children' => $children, // Append children if they exist
+                'children' => $children,
             ];
         }
 
         return $result;
     }
 
-    // Function to return the hierarchy as JSON
     public function getHierarchyAsJson()
     {
-        $hierarchy = $this->getHierarchy(); // Start from the top-level parents
-        return response()->json($hierarchy); // Return as JSON response
+        $hierarchy = $this->getHierarchy();
+        return response()->json($hierarchy);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(HdCatalogue::class, 'idParent', 'id');
     }
 }
 

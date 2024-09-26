@@ -9,7 +9,9 @@ class HdTechnicalGroups extends Model
 {
     use HasFactory;
     protected $table = 'hd_technical_groups';
-    public $timestamps = false; 
+
+    public $timestamps = false;
+
     protected $fillable = [
         'id',
         'code',

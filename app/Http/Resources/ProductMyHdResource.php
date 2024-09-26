@@ -9,6 +9,7 @@ class ProductMyHdResource extends JsonResource
 {
     public function toArray($request)
     {
+
         return [
             'id'=> $this->idProduct,
             'imagePathProduct' => base64_decode($this->imagePathProduct),

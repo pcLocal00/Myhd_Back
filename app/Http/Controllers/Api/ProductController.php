@@ -37,7 +37,6 @@ class ProductController extends Controller
         return ProductPaPResource::collection($products);
     }
 
-
     public function getOneProduct($id)
     {
         $product = Product::find($id)->first();
@@ -196,7 +195,6 @@ class ProductController extends Controller
             'TG_LABELTXTFIELD' => 'nullable|string|max:255',
         ]);
 
-        // Map the request data to the model attributes
         $data = [
             'code' => $validatedData['TG_CODE'],
             'codeValeur' => $validatedData['TG_CODE_RAPID'],
@@ -208,20 +206,5 @@ class ProductController extends Controller
 
         HdTechnicalGroups::create($data);
     }
-
-    public function getHdCodeTg() {
-
-        $hdcodetg = HdCodeTg::get();
-
-        $data = $hdcodetg->map(function($item) {
-            return [
-                'name' => $item->label,
-                'code' => $item->code
-            ];
-        });
-
-        return response()->json(['data' => $data]);
-    }
-
 }
 

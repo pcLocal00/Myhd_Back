@@ -11,9 +11,11 @@ class RfqFamily extends Model
     use HasFactory;
 
     protected $table = 'rfq_family';
+    protected $primaryKey = 'idFamily';
+    public $timestamps = false;
 
     protected $fillable = [
-        'idFamily ',
+        'idFamily',
         'codeFamily',
         'nameFamily',
         'descFamily',
@@ -23,11 +25,15 @@ class RfqFamily extends Model
         'enabledFamily',
         'isShowInCatalogue',
         'delaiLivraison',
-        'idParentFamil',
+        'idParentFamily',
     ];
-    public function product()
-    {
+
+    public function product() {
         return $this->hasMany(RfqProduct::class,'idFkFamily');
+    }
+
+    public function parent() {
+        return $this->belongsTo(RfqFamily::class, 'idParentFamily', 'idFamily');
     }
 }
 
