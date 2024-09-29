@@ -18,6 +18,7 @@ class ProductOneMyHdResource extends JsonResource
             'descProduct' => $this->descProduct,
             'numOrderProduct' => $this->numOrderProduct,
             'priceModel' => $this->priceModel,
+            'idFkFamily' => $this->idFkFamily,
         ];
     }
 }

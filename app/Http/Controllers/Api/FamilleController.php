@@ -136,6 +136,4 @@ class FamilleController extends Controller
             'catalogue' => $catalogue
         ]);
     }
-
-
 }

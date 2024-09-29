@@ -64,6 +64,8 @@ Route::middleware(['cors'])->group(function () {
     Route::get('/product_action/{id}/{type}',[ProductController::class,'OptionsProductAction']);
     Route::get('/sdt_action/{id}/{type}',[ProductController::class,'sdtConfiguredOptionsElementAction']);
     Route::get('/sdt_papers_element/{id}/{type}',[ProductController::class,'sdtConfiguredPapersElement']);
+    Route::post('/manage_actions',[ProductController::class,'manageActionsConfigsOptionsProductAction']);
+    Route::post('/manage_element',[ProductController::class,'manageActionsConfigsOptionsElement']);
 
     //***** NEWS **** */
     Route::get('/news',[NewsController::class,'getNews']);

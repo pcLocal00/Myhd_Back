@@ -9,7 +9,7 @@ class HdLineTg extends Model
 {
     use HasFactory;
     protected $table = 'hd_line_tg';
-
+    public $timestamps = false;
     protected $fillable = [
         'id',
         'code',
