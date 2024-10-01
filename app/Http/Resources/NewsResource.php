@@ -14,7 +14,7 @@ class NewsResource extends JsonResource
             "header"=> $this->header,
             "subheader"=> $this->subheader,
             "description"=> $this->description,
-            "image" => $this->image
+            "image" => base64_decode($this->image)
         ];
     }
 }

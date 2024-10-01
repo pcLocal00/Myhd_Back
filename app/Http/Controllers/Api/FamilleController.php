@@ -58,7 +58,6 @@ class FamilleController extends Controller
     }
 
     public function AddFamille(Request $request) {
-        Log::info($request->all());
 
         $validatedData = $request->validate([
             'IMG_FAMILY'                => 'nullable|image|max:1024',
@@ -76,9 +75,6 @@ class FamilleController extends Controller
             'codeFamily'            =>  $validatedData['CODE_FAMILY'] ?? null,
             'nameFamily'            =>  $validatedData['NAME_FAMILY'],
             'descFamily'            =>  $validatedData['DESC_FAMILY'] ?? null,
-            'imagePathFamily'       =>  isset($validatedData['IMG_FAMILY'])
-                                          ? base64_encode(file_get_contents($validatedData['IMG_FAMILY']->getRealPath()))
-                                          : null,
             'numOrderFamily'        =>  $validatedData['NUMORDER_FAMILY'] ?? null,
             'enabledFamily'         =>  $validatedData['ACTIVE_FAMILY'],
             'isShowInCatalogue'     =>  $validatedData['SHOW_IN_CATALOGUE_FAMILY'] ?? null,
@@ -86,15 +82,18 @@ class FamilleController extends Controller
             'idParentFamily'        =>  $validatedData['SELECT_PARENT_FAMILY_1'] ?? null,
         ];
 
-        RfqFamily::create($data);
+        $family = RfqFamily::create($data);
+
+        if ($request->hasFile('IMG_FAMILY')) {
+            $imagePath = $request->file('IMG_FAMILY')->store('family', 'public');
+            $family->imagePathFamily = base64_encode($imagePath);
+        }
 
         return response()->json(['message' => 'Family added successfully'], 201);
     }
 
     public function updateFamille(Request $request, $id) {
 
-        Log::info($request->all());
-
         $validatedData = $request->validate([
             'IMG_FAMILY'                => 'nullable|image|max:1024',
             'NAME_FAMILY'               => 'required|string|max:255',
@@ -107,21 +106,21 @@ class FamilleController extends Controller
             'SHOW_IN_CATALOGUE_FAMILY'  => 'nullable|boolean',
         ]);
 
-        $catalogue = RfqFamily::where('idFamily', $id)->first();
+        $family = RfqFamily::where('idFamily', $id)->first();
 
-        Log::info($catalogue);
+        if (!$family) {
+            return response()->json(['error' => 'Family not found'], 404);
+        }
 
-        if (!$catalogue) {
-            return response()->json(['error' => 'Catalogue not found'], 404);
+        if ($request->hasFile('IMG_FAMILY')) {
+            $imagePath = $request->file('IMG_FAMILY')->store('family', 'public');
+            $family->imagePathFamily = base64_encode($imagePath);
         }
 
         $data = [
             'codeFamily'            =>  $validatedData['CODE_FAMILY'] ?? null,
             'nameFamily'            =>  $validatedData['NAME_FAMILY'],
             'descFamily'            =>  $validatedData['DESC_FAMILY'] ?? null,
-            'imagePathFamily'       =>  isset($validatedData['IMG_FAMILY'])
-                                          ? base64_encode(file_get_contents($validatedData['IMG_FAMILY']->getRealPath()))
-                                          : $catalogue->imagePathFamily, // Keep the old image if not provided
             'numOrderFamily'        =>  $validatedData['NUMORDER_FAMILY'] ?? null,
             'enabledFamily'         =>  $validatedData['ACTIVE_FAMILY'],
             'isShowInCatalogue'     =>  $validatedData['SHOW_IN_CATALOGUE_FAMILY'] ?? null,
@@ -129,11 +128,11 @@ class FamilleController extends Controller
             'idParentFamily'        =>  $validatedData['SELECT_PARENT_FAMILY_1'] ?? null,
         ];
 
-        $catalogue->update($data);
+        $family->update($data);
 
         return response()->json([
-            'message' => 'Catalogue updated successfully',
-            'catalogue' => $catalogue
+            'message' => 'Family updated successfully',
+            'Family' => $family
         ]);
     }
 }

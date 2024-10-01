@@ -24,4 +24,8 @@ class HdEvents extends Model
         'idJob',
         'idCustomer',
     ];
+    public function User()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

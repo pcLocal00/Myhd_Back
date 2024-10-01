@@ -31,6 +31,7 @@ Route::middleware(['cors'])->group(function () {
     //***** DEVIS **** */
     Route::get('/devis',[DevisController::class,'getDevis']);
     Route::get('/devis/{id}',[DevisController::class,'getOneDevis']);
+    Route::get('/pdf_devis/{idDevis}/{typeAction}',[DevisController::class,'generatePdfDevis']);
 
     //***** COMMANDE **** */
     Route::get('/job',[JobController::class,'getJob']);
@@ -69,7 +70,8 @@ Route::middleware(['cors'])->group(function () {
 
     //***** NEWS **** */
     Route::get('/news',[NewsController::class,'getNews']);
-    Route::post('/news',[NewsController::class,'addNews']);
+    Route::post('/add/news',[NewsController::class,'addNews']);
     Route::get('/news/{id}',[NewsController::class,'getOneNews']);
+    Route::post('/update/news/{id}',[NewsController::class,'updateNews']);
 
 });

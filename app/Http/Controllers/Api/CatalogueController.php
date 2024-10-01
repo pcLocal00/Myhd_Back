@@ -72,7 +72,6 @@ class CatalogueController extends Controller
 
     public function AddCatalogue(Request $request) {
 
-        Log::info($request->all());
 
         $validatedData = $request->validate([
             'image_c'               => 'nullable|image|max:1024',
@@ -110,6 +109,7 @@ class CatalogueController extends Controller
     }
 
     public function updateCatalogue(Request $request, $id) {
+
         $validatedData = $request->validate([
             'image_c'               => 'nullable|image|max:1024',
             'code_c'                => 'required|string|max:255',
@@ -126,8 +126,12 @@ class CatalogueController extends Controller
 
         $catalogue = HdCatalogue::findOrFail($id);
 
+        if ($request->hasFile('image_c')) {
+            $imagePath = $request->file('image_c')->store('catalogues', 'public');
+            $catalogue->img = base64_encode($imagePath);
+        }
+
         $data = [
-            'img'                   => isset($validatedData['image_c']) ? base64_encode(file_get_contents($validatedData['image_c']->getRealPath())) : null,
             'code'                  => $validatedData['code_c'],
             'name'                  => $validatedData['name_c'] ?? null,
             'isActive'              => $validatedData['isActive'] ? 1 : 0,
@@ -149,3 +153,4 @@ class CatalogueController extends Controller
     }
 
 }
+
