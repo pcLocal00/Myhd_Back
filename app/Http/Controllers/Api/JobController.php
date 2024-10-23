@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\HdEvents;
 use App\Models\Job;
+use App\Models\JobStatus;
 use App\Models\User;
 
 class JobController extends Controller
@@ -93,7 +94,7 @@ class JobController extends Controller
                 'jobstatus.code',
                 'jobstate.code as statecode',
                 'jobstatus.namestatus as namestatus',
-                
+
             )->where('job.idjob', $id)->first();
 
         return response()->json(['commande' => $job]);
@@ -126,19 +127,34 @@ class JobController extends Controller
 
     public function getNameUser($idUser)
     {
-        // Initialize an empty name string
         $nameUser = '';
 
-        // Fetch the user's first and last name using Eloquent
         $user = User::select('firstnameuser', 'lastnameuser')
             ->where('iduser', $idUser)
             ->first();
 
-        // If the user exists, concatenate their first and last name
         if ($user) {
             $nameUser = $user->firstnameuser . ' ' . $user->lastnameuser;
         }
 
         return $nameUser;
+    }
+
+    public function changeStatus($id, $type)
+    {
+        $job = Job::FindOrFail($id);
+        $jobStatus = JobStatus::find($job->jobstatusid);
+
+        if ($jobStatus) {
+            $jobStatus->code = $type;
+            $jobStatus->namestatus = $type == 'ACCEPTED' ? 'En production' : 'cancel';
+            $jobStatus->save();
+        } else {
+            return response()->json(['message' => 'Job status not found'], 404);
+        }
+
+        $message = $type === 'ACCEPTED' ? 'Job accepted successfully' : ($type === 'CANCELLED' ? 'Job cancelled successfully' : 'Status updated successfully');
+
+        return response()->json(['message' => $message]);
     }
 }

@@ -37,7 +37,7 @@ Route::middleware(['cors'])->group(function () {
     Route::get('/job',[JobController::class,'getJob']);
     Route::get('/job/{id}',[JobController::class,'getOneJob']);
     Route::get('/job/historique/{id}',[JobController::class,'historiqueCommande']);
-
+    Route::put('/job/{id}/{type}', [JobController::class, 'changeStatus']);
     //***** CATALOGUE **** */
     Route::get('/catalogue',[CatalogueController::class,'getCatalogue']);
     Route::post('/add/catalogue',[CatalogueController::class,'AddCatalogue']);

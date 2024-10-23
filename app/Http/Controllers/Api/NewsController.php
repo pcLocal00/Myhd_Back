@@ -31,7 +31,6 @@ class NewsController extends Controller
     {
         $data = $request->all();
         Log::info($data);
-
         $validated = $request->validate([
             'titre_news' => 'required|string',
             'sous_titre_news' => 'required|string',
@@ -70,6 +69,7 @@ class NewsController extends Controller
             $imagePath = $request->file('image_news')->store('news_images', 'public');
             $news->image = base64_encode($imagePath);
         }
+        
         $data = [
             'header'        => $validated['titre_news'] ?? null ,
             'subheader'     => $validated['sous_titre_news'] ?? null,

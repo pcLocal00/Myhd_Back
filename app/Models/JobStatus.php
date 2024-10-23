@@ -12,10 +12,7 @@ class JobStatus extends Model
 
     protected $table = 'jobstatus';
 
-    protected $fillable = [
+    public $timestamps = false;
 
-        'id',
-        'namestatus',
-        'code',
-    ];
+    protected $fillable = ['id','namestatus','code'];
 }
